@@ -27,14 +27,13 @@ const saltRounds = 10;
 router.post('/', async function(req, res, next) {
   let username = req.body.username;
   let password = req.body.password;
-  console.log(username)
   try{
     const connection = await mysql.createConnection(database)
     let sql = `select * from user where username = '${username}'`
     let [row] = await connection.query(sql)
     await connection.end()
     const result = bcrypt.compareSync(password , row[0].password);
-    let token = jwt.sign({ data:row[0].username }, 'secret', { expiresIn: 60 * 60 * 24 })
+    let token = jwt.sign({ data: row[0].role }, 'secret', { expiresIn: 60 * 60 * 24 })
     if(result===true) {
       user = {
         access_token: token,
