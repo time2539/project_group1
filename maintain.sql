@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2020 at 06:34 AM
+-- Generation Time: Apr 07, 2020 at 09:42 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -31,7 +31,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `maintenance_noti` (
   `maintenance_id` int(11) NOT NULL,
   `create_by` int(11) NOT NULL,
+  `accept_by` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
+  `img_path` text NOT NULL,
   `status` varchar(1) NOT NULL,
   `detail` text NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -49,6 +51,13 @@ CREATE TABLE `type` (
   `type_name` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `type`
+--
+
+INSERT INTO `type` (`type_id`, `type_name`) VALUES
+(1, 'เครื่องใช้ไฟฟ้า');
+
 -- --------------------------------------------------------
 
 --
@@ -63,6 +72,13 @@ CREATE TABLE `user` (
   `firstname` varchar(30) NOT NULL,
   `lastname` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`user_id`, `username`, `password`, `role`, `firstname`, `lastname`) VALUES
+(1, 'admin', 'admin', 'admin', 'tanapat', 'apiwongngam');
 
 --
 -- Indexes for dumped tables
@@ -102,13 +118,13 @@ ALTER TABLE `maintenance_noti`
 -- AUTO_INCREMENT for table `type`
 --
 ALTER TABLE `type`
-  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
