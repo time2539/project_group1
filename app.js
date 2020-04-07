@@ -5,20 +5,20 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-<<<<<<< HEAD
+
 var usersRouter = require('./routes/users'); //user path
 var cors = require('cors')
 var app = express();
 var bodyParser = require('body-parser');
 var testRouter = require('./routes/test');
 
-=======
+
 var usersRouter = require('./routes/users'); 
 var cors = require('cors')
 var bodyParser = require('body-parser')
 
 var app = express();
->>>>>>> 2349120b4b9040445e02ba0f8486a0e5107ebe8b
+
 // view engine setup
 app.use(bodyParser.urlencoded({
   limit: '500mb'
@@ -51,11 +51,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-<<<<<<< HEAD
+
 app.use('/test',testRouter);
 
-=======
->>>>>>> 2349120b4b9040445e02ba0f8486a0e5107ebe8b
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
