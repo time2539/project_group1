@@ -9,6 +9,7 @@ var cors = require("cors");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users"); //user path
 var testRouter = require("./routes/test");
+var maintain = require("./routes/maintain");
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/maintain", maintain);
 
 app.use("/test", testRouter);
 
