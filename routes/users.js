@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/userProfile', function(req, res, next) {
+/*router.get('/userProfile', function(req, res, next) {
   var query = select()
   .from('users','u')
   .where({'u.user_id': 1})
@@ -15,11 +15,11 @@ router.get('/userProfile', function(req, res, next) {
   await connection.end();
   res.send(query);
 });
-
-router.post('/updateProfile', function(req, res, next) {
+*/
+ /*router.post('/updateProfile', function(req, res, next) {
   var query = select();
   res.send('respond with a resource');
 });
-
+*/
 
 module.exports = router;
