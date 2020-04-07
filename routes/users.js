@@ -3,9 +3,16 @@ var router = express.Router();
 const mysql = require('mysql2/promise');
 const database = require('../config/database');
 
+const mysql = require('mysql2/promise')
+const database = require('../config/database')
+
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/time', async function(req, res, next) {
+  const connection = await mysql.createConnection(database)
+  let sql = 'select * from user'
+  const [row] = await connection.query(sql)
+  await connection.end()
+  res.send(row);
 });
 
 router.get('/test',async function(req, res, next){
