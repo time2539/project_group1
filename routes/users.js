@@ -18,11 +18,12 @@ router.get("/test", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
   let sql = "select * from user";
   const [row] = await connection.query(sql);
+  y;
   await connection.end();
   res.send(row);
 });
 
-router.get("/userProfile", async function (req, res, next) {
+router.get("/api/userProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
   let sql = queryize.select()
   .from('user')
@@ -33,20 +34,28 @@ router.get("/userProfile", async function (req, res, next) {
   res.send(profile);
 });
 
-router.post("/updateProfile", async function (req, res, next) {
+router.post("/api/updateProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
 
   let sql = queryize.update()
+
   .table('user')
   .set({
     firstname : req.body.firstname,
     lastname : req.body.lastname
   })
-  .where({'user_id' : req.body.user_id})
+  .where({'user_id' : req.body.user_id}) 
   .compile();
   const [profile] = await connection.query(sql.query,sql.data);
  await connection.end();
-  res.send(profile);
+  res.send({
+      message: 'success',
+      result: {
+        user_id: req.body.user_id,
+        firstname : req.body.firstname,
+        lastname : req.body.lastname
+      }
+    });
 });
 
 
