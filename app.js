@@ -13,6 +13,7 @@ var middleware = require('./routes/middleware')
 var maintain = require("./routes/maintain");
 var mantenanceRouter = require('./routes/maintenance')
 var app = express();
+app.use(express.static('public'));
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -36,7 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/maintain", maintain);
 
-app.use("/maintenance", mantenanceRouter);
+app.use("/api/maintenance", mantenanceRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/login', loginRouter)
