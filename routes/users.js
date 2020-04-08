@@ -37,6 +37,7 @@ router.post("/api/updateProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
 
   let sql = queryize.update()
+
   .table('user')
   .set({
     firstname : req.body.firstname,
@@ -46,7 +47,9 @@ router.post("/api/updateProfile", async function (req, res, next) {
   .compile();
   const [profile] = await connection.query(sql.query,sql.data);
  await connection.end();
-  res.send(profile);
+  res.send({
+      message: 'success'
+    });
 });
 
 
