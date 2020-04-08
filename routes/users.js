@@ -22,7 +22,7 @@ router.get("/test", async function (req, res, next) {
   res.send(row);
 });
 
-router.get("/userProfile", async function (req, res, next) {
+router.get("/api/userProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
   let sql = queryize.select()
   .from('user')
@@ -33,7 +33,7 @@ router.get("/userProfile", async function (req, res, next) {
   res.send(profile);
 });
 
-router.post("/updateProfile", async function (req, res, next) {
+router.post("/api/updateProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
 
   let sql = queryize.update()
