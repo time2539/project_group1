@@ -41,11 +41,13 @@ router.post("/api/updateProfile", async function (req, res, next) {
   .table('user')
   .set({
     firstname : req.body.firstname,
-    lastname : req.body.lastname
+    lastname : req.body.lastname,
+    address: req.body.address,
+    phone: req.body.phone
   })
   .where({'user_id' : req.body.user_id}) 
   .compile();
-  const [profile] = await connection.query(sql.query,sql.data);
+  //const [profile] = await connection.query(sql.query,sql.data);
  await connection.end();
   res.send({
       message: 'success',
