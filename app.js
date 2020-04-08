@@ -35,6 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/maintain", maintain);
 
+app.use("/maintenance", mantenanceRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api/login', loginRouter)
