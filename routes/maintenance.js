@@ -59,6 +59,24 @@ const addmaintenance = async (req, res, next) => {
   }
 }
 
+const updateStatus = async (req, res, next) => {
+  const connection = await mysql.createConnection(database)
+  let sql = queryize.update()
+  .table('maintenance_noti')
+  .set({
+    status: req.body.status,
+    accept_at: Date.now(),
+    create_by: req.body.user_id
+  })
+  .where({'maintenance_id' : req.body.maintenance_id})
+  .compile();
+  await connection.end()
+  return res.send({
+    message: 'success'
+  });
+};
+
 router.get("/", getType);
 router.post('/add', upload.single('img_path'), addmaintenance)
+router.post("/", updateStatus);
 module.exports = router;
