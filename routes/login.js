@@ -63,7 +63,8 @@ router.post('/register', async function(req, res, next) {
   let firstname = req.body.firstname
   let lastname = req.body.lastname
   let role = req.body.role
-  le
+  let address = req.body.address
+  let phone = req.body.phone
   const salt = bcrypt.genSaltSync(saltRounds); 
   const hash = bcrypt.hashSync(password, salt);
   try {
