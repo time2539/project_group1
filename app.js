@@ -11,6 +11,7 @@ var cors = require('cors')
 var bodyParser = require('body-parser')
 var middleware = require('./routes/middleware')
 var maintain = require("./routes/maintain");
+var mantenanceRouter = require('./routes/maintenance')
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
