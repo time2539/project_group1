@@ -6,24 +6,7 @@ var queryize = require('queryize');
 
 
 /* GET users listing. */
-router.get("/time", async function (req, res, next) {
-  const connection = await mysql.createConnection(database);
-  let sql = "select * from user";
-  const [row] = await connection.query(sql);
-  await connection.end();
-  res.send(row);
-});
-
-router.get("/test", async function (req, res, next) {
-  const connection = await mysql.createConnection(database);
-  let sql = "select * from user";
-  const [row] = await connection.query(sql);
-  y;
-  await connection.end();
-  res.send(row);
-});
-
-router.get("/api/userProfile", async function (req, res, next) {
+router.get("/userProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
   let sql = queryize.select()
   .from('user')
@@ -34,7 +17,7 @@ router.get("/api/userProfile", async function (req, res, next) {
   res.send(profile);
 });
 
-router.post("/api/updateProfile", async function (req, res, next) {
+router.post("/updateProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
 
   let sql = queryize.update()
