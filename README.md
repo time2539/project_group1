@@ -1,5 +1,5 @@
 install project
-  npm install
+ - npm install
 
 start project
-  npm start
+ - npm start
