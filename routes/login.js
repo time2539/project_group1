@@ -42,14 +42,38 @@ router.post('/', async function(req, res, next) {
         lastname: row[0].lastname,
         role: row[0].role
       }
-      return res.send(user)
+      res.send(user)
     }
   } catch(e) {
-    return res.status(401).send({
+    res.status(401).send({
       message: 'user not found'
     })
   }
 
 });
+
+router.post('/register', async function(req, res, next) {
+  let username = req.body.username
+  let password = req.body.password
+  let firstname = req.body.firstname
+  let lastname = req.body.lastname
+  let role = req.body.role
+  const salt = bcrypt.genSaltSync(saltRounds); 
+  const hash = bcrypt.hashSync(password, salt);
+  try {
+    const connection = await mysql.createConnection(database)
+    let sql = `insert into user (username, password, role, firstname, lastname) values('${username}', '${hash}', '${role}','${firstname}', '${lastname}')`
+    await connection.query(sql)
+    await connection.end()
+    res.send({
+      message: 'success'
+    })
+  } catch(e) {
+    res.status(500).send({
+      message: 'error'
+    })
+  }
+})
+
 
 module.exports = router;
