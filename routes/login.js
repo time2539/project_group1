@@ -43,6 +43,10 @@ router.post('/', async function(req, res, next) {
         role: row[0].role
       }
       res.send(user)
+    } else {
+      res.status(401).send({
+        message: 'user not found'
+      })
     }
   } catch(e) {
     res.status(401).send({
