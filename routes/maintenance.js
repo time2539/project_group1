@@ -3,30 +3,30 @@ var router = express.Router();
 const mysql = require("mysql2/promise");
 const database = require("../config/database");
 const queryize = require("queryize");
-var multer  = require('multer')
-var fs = require('fs')
+var multer = require("multer");
+var fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/images')
+    cb(null, "./public/images");
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + file.originalname)
+    cb(null, Date.now() + file.originalname);
   },
-})
+});
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 5
-  }
+    fileSize: 1024 * 1024 * 5,
+  },
   // fileFilter: fileFilter
-})
+});
 
 const getType = async (req, res, next) => {
   try {
     return res.send({
-      message: "success"
+      message: "success",
     });
   } catch (error) {
     return res.status(500).send({
@@ -38,52 +38,88 @@ const getType = async (req, res, next) => {
 
 const addmaintenance = async (req, res, next) => {
   try {
-    const connection = await mysql.createConnection(database)
-    let create_by = '3'
-    let accept_by = '2'
-    let type_id = '1'
-    let img_path = req.file.filename
-    let status = 'p'
-    let detail = req.body.message
-    let sql = `insert into maintenance_noti (create_by, accept_by, type_id, img_path, status, detail) values('${create_by}', '${accept_by}', '${type_id}' ,'${img_path}', '${status}', '${detail}')`
-    await connection.query(sql)
-    await connection.end()
+    const connection = await mysql.createConnection(database);
+    let create_by = "3";
+    let accept_by = "2";
+    let type_id = "1";
+    let img_path = req.file.filename;
+    let status = "p";
+    let detail = req.body.message;
+    let sql = `insert into maintenance_noti (create_by, accept_by, type_id, img_path, status, detail) values('${create_by}', '${accept_by}', '${type_id}' ,'${img_path}', '${status}', '${detail}')`;
+    await connection.query(sql);
+    await connection.end();
     return res.send({
-      message: 'success'
-    })
+      message: "success",
+    });
   } catch (error) {
     return res.status(500).send({
       message: error.message,
       error: true,
     });
   }
-}
+};
 
 const updateStatus = async (req, res, next) => {
-  const connection = await mysql.createConnection(database)
-  let sql = queryize.update()
-  .table('maintenance_noti')
-  .set({
-    status: req.body.status,
-    accept_at: Date.now(),
-    create_by: req.body.user_id
-  })
-  .where({'maintenance_id' : req.body.maintenance_id})
-  .compile();
-  await connection.query(sql.query,sql.data);
-  await connection.end();
-  return res.send({
-    message: 'success',
-    result:{
-    status: req.body.status,
-    accept_at: Date.now(),
-    create_by: req.body.user_id
+  try {
+    const connection = await mysql.createConnection(database);
+    let accept_data = req.body;
+    let status = accept_data.status;
+    let sql;
+    let date_now = new Date();
+    date_now.setHours(date_now.getHours() + 7);
+    if (status.toLowerCase() == "w") {
+      accept_data.status = "C";
+      sql = queryize
+        .update()
+        .table("maintenance_noti")
+        .set({
+          status: accept_data.status,
+          accept_by: accept_data.admin_id,
+          accept_at: date_now,
+          updated_at: date_now,
+        })
+        .where({ maintenance_id: accept_data.maintenance_id })
+        .compile();
+    } else if (status.toLowerCase() == "c") {
+      accept_data.status = "S";
+      sql = queryize
+        .update()
+        .table("maintenance_noti")
+        .set({
+          status: accept_data.status,
+          updated_at: date_now,
+        })
+        .where({ maintenance_id: accept_data.maintenance_id })
+        .compile();
+    } else {
+      await connection.end();
+      res.send({
+        message: "status invalid",
+      });
+      return 0;
     }
-    
-  });
+
+    await connection.query(sql.query, sql.data);
+    await connection.end();
+    if (accept_data.status == "C") {
+      return res.send({
+        message: "accept work success",
+      });
+    } else {
+      return res.send({
+        message: "work successed",
+      });
+    }
+  } catch (error) {
+    console.log("error", error.message);
+    res.send({
+      result: "fail",
+      message: error.message,
+    });
+  }
 };
 
 router.get("/", getType);
-router.post('/add', upload.single('img_path'), addmaintenance)
-router.post("/api/updateStatus", updateStatus);
+router.post("/add", upload.single("img_path"), addmaintenance);
+router.put("/", updateStatus);
 module.exports = router;
