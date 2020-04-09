@@ -28,22 +28,13 @@ router.post("/updateProfile", async function (req, res, next) {
     address : req.body.address,
     phone : req.body.phone
   })
-  .where({'user_id' : req.body.user_id}) 
+  .where({'user_id' : req.body.user_id})
   .compile();
   const [profile] = await connection.query(sql.query,sql.data);
- await connection.end();
+  await connection.end();
   res.send({
-      message: 'success',
-      result: {
-        user_id: req.body.user_id,
-        firstname : req.body.firstname,
-        lastname : req.body.lastname,
-        address: req.body.address,
-        phone: req.body.phone
-      }
-    });
+    message: 'success',
+  });
 });
-
-
 
 module.exports = router;
