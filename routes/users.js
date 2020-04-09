@@ -17,7 +17,7 @@ router.post("/userProfile", async function (req, res, next) {
   res.send(profile);
 });
 
-router.post("/updateProfile", async function (req, res, next) {
+router.put("/updateProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
 
   let sql = queryize.update()
