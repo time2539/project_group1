@@ -3,8 +3,9 @@ var router = express.Router();
 const mysql = require("mysql2/promise");
 const database = require("../config/database");
 var queryize = require("queryize");
+const middleware = require("./middleware");
 
-const getAllMaintain = async (req, res, next) => {
+const getAllMaintains = async (req, res, next) => {
   try {
     const connection = await mysql.createConnection(database);
     let sql1 = queryize
@@ -20,7 +21,8 @@ const getAllMaintain = async (req, res, next) => {
         "m.detail",
         "m.accept_by",
         "m.typeManage",
-        "m.status"
+        "m.status",
+        "m.img_path"
       )
       .orderBy("m.maintenance_id")
       .compile();
@@ -70,6 +72,25 @@ const getAllMaintain = async (req, res, next) => {
   }
 };
 
-router.get("/", getAllMaintain);
+const acceptMaintain = async (req, res, next) => {
+  try {
+    let accept_id = req.body;
+    const connection = await mysql.createConnection(database);
+    let user = req.user;
+    console.log("user: ", user);
+    res.send({
+      message: "yo yo!",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send({
+      message: error.message,
+      error: true,
+    });
+  }
+};
+
+router.get("/", middleware, getAllMaintains);
+router.put("/", middleware, acceptMaintain);
 
 module.exports = router;
