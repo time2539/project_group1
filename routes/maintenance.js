@@ -30,7 +30,8 @@ const addmaintenance = async (req, res, next) => {
     let img_path = req.file.filename
     let status = 'p'
     let detail = req.body.detail
-    let sql = `insert into maintenance_noti (create_by, img_path, status, detail) values('${create_by}', '${img_path}', '${status}', '${detail}')`
+    let type_manage = req.body.typeManage
+    let sql = `insert into maintenance_noti (create_by, img_path, status, detail, typeManage) values('${create_by}', '${img_path}', '${status}', '${detail}', '${type_manage}')`
     await connection.query(sql)
     await connection.end()
     return res.send({
