@@ -12,7 +12,7 @@ var middleware = require("./routes/middleware");
 var mantenanceRouter = require("./routes/maintenance");
 var dashboardRouter = require("./routes/dashboard");
 var app = express();
-app.use(express.static('public'));
+app.use(express.static("public"));
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
