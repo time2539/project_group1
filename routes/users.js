@@ -13,7 +13,7 @@ router.get("/userProfile", async function (req, res, next) {
   .where({'user_id': req.body.user_id})
   .compile();
   const [profile] = await connection.query(sql.query,sql.data);
- await connection.end();
+  await connection.end();
   res.send(profile);
 });
 

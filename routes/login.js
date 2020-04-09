@@ -69,6 +69,13 @@ router.post('/register', async function(req, res, next) {
   const hash = bcrypt.hashSync(password, salt);
   try {
     const connection = await mysql.createConnection(database)
+    let sql_select_user =  `select * from user where username = '${username}'`
+    let [row] = await connection.query(sql_select_user)
+    if(row.length > 0) {
+      return res.send({
+        message: 'username already exists'
+      })
+    }
     let sql = `insert into user (username, password, role, firstname, lastname, address, phone) values('${username}', '${hash}', '${role}','${firstname}', '${lastname}', '${address}', '${phone}')`
     await connection.query(sql)
     await connection.end()
