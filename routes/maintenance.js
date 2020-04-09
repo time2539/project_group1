@@ -3,29 +3,71 @@ var router = express.Router();
 const mysql = require("mysql2/promise");
 const database = require("../config/database");
 const queryize = require("queryize");
+var multer  = require('multer')
+var fs = require('fs')
 
-const getType = async (req, res, next) => {
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/images')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + file.originalname)
+  },
+})
+
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  }
+  // fileFilter: fileFilter
+})
+
+const addmaintenance = async (req, res, next) => {
   try {
-    const connection = mysql.createConnection(database);
-    // let sql = queryize().select().from("type").compile();
-    // console.log("sql :", sql);
-    // const [row_type] = await connection.query(sql.query, sql.data);
-    let sql = `select * from type`;
-    const [row] = await connection.query(sql);
-    await connection.end();
+    const connection = await mysql.createConnection(database)
+    let create_by = req.body.user_id
+    let img_path = req.file.filename
+    let status = 'p'
+    let detail = req.body.detail
+    let type_manage = req.body.typeManage
+    let sql = `insert into maintenance_noti (create_by, img_path, status, detail, typeManage) values('${create_by}', '${img_path}', '${status}', '${detail}', '${type_manage}')`
+    await connection.query(sql)
+    await connection.end()
     return res.send({
-      message: "success",
-      result: row_type,
-    });
+      message: 'success'
+    })
   } catch (error) {
-    console.log(error.message);
     return res.status(500).send({
       message: error.message,
       error: true,
     });
   }
+}
+
+const updateStatus = async (req, res, next) => {
+  const connection = await mysql.createConnection(database)
+  let sql = queryize.update()
+  .table('maintenance_noti')
+  .set({
+    status: req.body.status,
+    accept_at: Date.now(),
+    create_by: req.body.user_id
+  })
+  .where({'maintenance_id' : req.body.maintenance_id})
+  .compile();
+  await connection.query(sql.query,sql.data);
+  await connection.end();
+  return res.send({
+    message: 'success',
+    result:{
+      status: req.body.status,
+      accept_at: Date.now(),
+      create_by: req.body.user_id
+    }
+  });
 };
 
-router.get("/", getType);
-
+router.post('/add', upload.single('img_path'), addmaintenance)
+router.put("/updateStatus", updateStatus);
 module.exports = router;

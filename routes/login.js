@@ -40,7 +40,8 @@ router.post('/', async function(req, res, next) {
         username: row[0].username,
         firstname: row[0].firstname,
         lastname: row[0].lastname,
-        role: row[0].role
+        role: row[0].role,
+        user_id: row[0].user_id   // เพิ่มบรรทัดนี้
       }
       res.send(user)
     } else {
@@ -62,11 +63,20 @@ router.post('/register', async function(req, res, next) {
   let firstname = req.body.firstname
   let lastname = req.body.lastname
   let role = req.body.role
+  let address = req.body.address
+  let phone = req.body.phone
   const salt = bcrypt.genSaltSync(saltRounds); 
   const hash = bcrypt.hashSync(password, salt);
   try {
     const connection = await mysql.createConnection(database)
-    let sql = `insert into user (username, password, role, firstname, lastname) values('${username}', '${hash}', '${role}','${firstname}', '${lastname}')`
+    let sql_select_user =  `select * from user where username = '${username}'`
+    let [row] = await connection.query(sql_select_user)
+    if(row.length > 0) {
+      return res.send({
+        message: 'username already exists'
+      })
+    }
+    let sql = `insert into user (username, password, role, firstname, lastname, address, phone) values('${username}', '${hash}', '${role}','${firstname}', '${lastname}', '${address}', '${phone}')`
     await connection.query(sql)
     await connection.end()
     res.send({
