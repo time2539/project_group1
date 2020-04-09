@@ -6,7 +6,7 @@ var queryize = require('queryize');
 
 
 /* GET users listing. */
-router.get("/userProfile", async function (req, res, next) {
+router.post("/userProfile", async function (req, res, next) {
   const connection = await mysql.createConnection(database);
   let sql = queryize.select()
   .from('user')
