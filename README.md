@@ -1,2 +1,5 @@
-project_test_group2_backend
-test aung test
+install project
+ - npm install
+
+start project
+ - npm start
