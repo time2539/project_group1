@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2020 at 11:48 AM
+-- Generation Time: Apr 10, 2020 at 04:22 AM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -46,7 +46,9 @@ CREATE TABLE `maintenance_noti` (
 --
 
 INSERT INTO `maintenance_noti` (`maintenance_id`, `create_by`, `accept_by`, `accept_at`, `img_path`, `status`, `detail`, `typeManage`, `created_at`, `updated_at`) VALUES
-(4, 3, NULL, '2020-04-08 09:45:02', '1586336411970cat-world.jpg', 'p', 'เปิดไม่ติด', '', '2020-04-08 09:00:12', '2020-04-08 09:00:12');
+(4, 3, NULL, '2020-04-08 09:45:02', '1586336411970cat-world.jpg', 'W', 'เปิดไม่ติด', '', '2020-04-08 09:00:12', '2020-04-08 09:00:12'),
+(5, 3, 4, '2020-04-09 05:55:40', '', 'S', 'มีปัญหา', 'IT', '2020-04-09 05:55:40', '2020-04-09 05:55:40'),
+(11, 3, NULL, '2020-04-10 01:55:22', '1586483722864museum.png', 'p', 'อผปแผปแ', 'Software', '2020-04-10 01:55:22', '2020-04-10 01:55:22');
 
 -- --------------------------------------------------------
 
@@ -72,7 +74,9 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`user_id`, `username`, `password`, `role`, `firstname`, `lastname`, `address`, `phone`) VALUES
 (2, 'admin', '$2b$10$EGH/lBpT6XLTyLY7jT.T8ezrMPz28FZG1F3JP80j.v.FSh4/7aRN2', 'admin', 'tanapat', 'apiwongngam', '', ''),
 (3, 'user', '$2b$10$mBh0lU48rz5X70PSGLfrGu/cyrfL.fLVjn7ScIg.3fetATvZNtF0.', 'user', 'tanapatuser', 'apiwongngamuser', '', ''),
-(4, 'time', '$2b$10$C7v6kBoWGsAF2TvQQYOb7uFaZ8BnFCVKR7YRmrxXMpR15z42ieOA2', 'admin', 'tana', 'eiei', '', '');
+(4, 'time', '$2b$10$C7v6kBoWGsAF2TvQQYOb7uFaZ8BnFCVKR7YRmrxXMpR15z42ieOA2', 'admin', 'tana', 'eiei', '', ''),
+(5, 'time28765', '$2b$10$2qleVzcHNSom4xj6eY6.oujIDT4JEp/te/hHgC1XbrhCA3KSe8Eou', 'admin', 'ธณภัทร ', 'อภิวงค์งาม', 'undefined', 'undefined'),
+(6, 'time123', '$2b$10$9YPrmPvX7gvrNXjM9BivAews/qF.Ij15iq9l6uTXumxFwPWh8JCpq', 'admin', 'tana', 'eiei', 'undefined', 'undefined');
 
 --
 -- Indexes for dumped tables
@@ -99,13 +103,13 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `maintenance_noti`
 --
 ALTER TABLE `maintenance_noti`
-  MODIFY `maintenance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `maintenance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables

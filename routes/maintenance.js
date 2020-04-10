@@ -41,7 +41,7 @@ const addmaintenance = async (req, res, next) => {
     const connection = await mysql.createConnection(database)
     let create_by = req.body.user_id
     let img_path = req.file.filename
-    let status = 'p'
+    let status = 'W'
     let detail = req.body.detail
     let type_manage = req.body.typeManage
     let sql = `insert into maintenance_noti (create_by, img_path, status, detail, typeManage) values('${create_by}', '${img_path}', '${status}', '${detail}', '${type_manage}')`
