@@ -3,8 +3,9 @@ var router = express.Router();
 const mysql = require("mysql2/promise");
 const database = require("../config/database");
 var queryize = require("queryize");
+const middleware = require("./middleware");
 
-const getAllMaintain = async (req, res, next) => {
+const getAllMaintains = async (req, res, next) => {
   try {
     const connection = await mysql.createConnection(database);
     let sql1 = queryize
@@ -20,7 +21,8 @@ const getAllMaintain = async (req, res, next) => {
         "m.detail",
         "m.accept_by",
         "m.typeManage",
-        "m.status"
+        "m.status",
+        "m.img_path"
       )
       .orderBy("m.maintenance_id")
       .compile();
@@ -88,7 +90,7 @@ const getMaintainUser = async (req, res, next) => {
         "m.typeManage",
         "m.status"
       )
-      .where({'m.create_by': req.params.id})
+      .where({ "m.create_by": req.params.id })
       .orderBy("m.maintenance_id")
       .compile();
     const [data] = await connection.query(sql1.query, sql1.data);
@@ -135,7 +137,7 @@ const getMaintainUser = async (req, res, next) => {
       error: true,
     });
   }
-}
+};
 
 const getMaintainAdmin = async (req, res, next) => {
   try {
@@ -155,7 +157,7 @@ const getMaintainAdmin = async (req, res, next) => {
         "m.typeManage",
         "m.status"
       )
-      .where({'m.accept_by':req.params.id})
+      .where({ "m.accept_by": req.params.id })
       .orderBy("m.maintenance_id")
       .compile();
     const [data] = await connection.query(sql1.query, sql1.data);
@@ -202,13 +204,13 @@ const getMaintainAdmin = async (req, res, next) => {
       error: true,
     });
   }
-}
+};
 
 const getMaintainNowDate = async (req, res, next) => {
   try {
-    const start = new Date().getTime();
-    console.log('start', start)
     const connection = await mysql.createConnection(database);
+    // sql1 = `select * from maintenance_noti where created_at >= CURDATE()`;
+    // sql1 = `select CURDATE()`;
     let sql1 = queryize
       .select()
       .from("maintenance_noti", "m")
@@ -224,7 +226,7 @@ const getMaintainNowDate = async (req, res, next) => {
         "m.typeManage",
         "m.status"
       )
-      .where({'m.accept_by': '4'})
+      .where(["m.created_at >= CURDATE()"])
       .orderBy("m.maintenance_id")
       .compile();
     const [data] = await connection.query(sql1.query, sql1.data);
@@ -234,6 +236,7 @@ const getMaintainNowDate = async (req, res, next) => {
       .from("maintenance_noti", "m")
       .leftJoin("user", { alias: "u", on: { "m.accept_by": "u.user_id" } })
       .columns("m.accept_by", "u.firstname", "m.maintenance_id")
+      .where(["m.created_at >= CURDATE()"])
       .orderBy("m.maintenance_id")
       .compile();
     const [maintainer] = await connection.query(sql2.query, sql2.data);
@@ -271,7 +274,7 @@ const getMaintainNowDate = async (req, res, next) => {
       error: true,
     });
   }
-}
+};
 
 const getMaintainSuccess = async (req, res, next) => {
   try {
@@ -291,7 +294,7 @@ const getMaintainSuccess = async (req, res, next) => {
         "m.typeManage",
         "m.status"
       )
-      .where({'m.status': 'S'})
+      .where({ "m.status": "S" })
       .orderBy("m.maintenance_id")
       .compile();
     const [data] = await connection.query(sql1.query, sql1.data);
@@ -338,7 +341,7 @@ const getMaintainSuccess = async (req, res, next) => {
       error: true,
     });
   }
-}
+};
 
 const getMaintainDetail = async (req, res, next) => {
   try {
@@ -359,7 +362,7 @@ const getMaintainDetail = async (req, res, next) => {
         "m.typeManage",
         "m.status"
       )
-      .where({'m.maintenance_id': req.params.id})
+      .where({ "m.maintenance_id": req.params.id })
       .orderBy("m.maintenance_id")
       .compile();
     const [data] = await connection.query(sql1.query, sql1.data);
@@ -379,7 +382,7 @@ const getMaintainDetail = async (req, res, next) => {
       result.date_manage = result.accept_at;
       result.customer_id = result.create_by;
       result.customer_name = result.firstname;
-      result.image_path = "http://localhost:3000/images/" + result.img_path
+      result.image_path = "http://localhost:3000/images/" + result.img_path;
       result.description = result.detail;
       if (result.accept_by == maintainer[i].accept_by) {
         result.admin_id = maintainer[i].accept_by;
@@ -408,12 +411,12 @@ const getMaintainDetail = async (req, res, next) => {
       error: true,
     });
   }
-}
+};
 
-router.get("/", getAllMaintain)
-router.get('/maintainuser/:id', getMaintainUser)
-router.get('/maintainadmin/:id', getMaintainAdmin)
-router.get('/maintainnowdate', getMaintainNowDate)
-router.get('/maintainsucess', getMaintainSuccess)
-router.get('/getmaintaindetail/:id', getMaintainDetail)
+router.get("/", getAllMaintains);
+router.get("/maintainuser/:id", getMaintainUser);
+router.get("/maintainadmin/:id", getMaintainAdmin);
+router.get("/maintainnowdate", getMaintainNowDate);
+router.get("/maintainsucess", getMaintainSuccess);
+router.get("/getmaintaindetail/:id", getMaintainDetail);
 module.exports = router;
