@@ -208,13 +208,9 @@ const getMaintainAdmin = async (req, res, next) => {
 
 const getMaintainNowDate = async (req, res, next) => {
   try {
-    const now_date = new Date();
-    now_date.setHours(0, 0, 0, 0);
-
-    console.log("now: ", new Date());
-    console.log("Date: ", now_date);
-
     const connection = await mysql.createConnection(database);
+    // sql1 = `select * from maintenance_noti where created_at >= CURDATE()`;
+    // sql1 = `select CURDATE()`;
     let sql1 = queryize
       .select()
       .from("maintenance_noti", "m")
@@ -230,7 +226,7 @@ const getMaintainNowDate = async (req, res, next) => {
         "m.typeManage",
         "m.status"
       )
-      .where("m.created_at", start, ">=")
+      .where(["m.created_at >= CURDATE()"])
       .orderBy("m.maintenance_id")
       .compile();
     const [data] = await connection.query(sql1.query, sql1.data);
@@ -240,6 +236,7 @@ const getMaintainNowDate = async (req, res, next) => {
       .from("maintenance_noti", "m")
       .leftJoin("user", { alias: "u", on: { "m.accept_by": "u.user_id" } })
       .columns("m.accept_by", "u.firstname", "m.maintenance_id")
+      .where(["m.created_at >= CURDATE()"])
       .orderBy("m.maintenance_id")
       .compile();
     const [maintainer] = await connection.query(sql2.query, sql2.data);
