@@ -208,8 +208,12 @@ const getMaintainAdmin = async (req, res, next) => {
 
 const getMaintainNowDate = async (req, res, next) => {
   try {
-    const start = new Date().getTime();
-    console.log("start", start);
+    const now_date = new Date();
+    now_date.setHours(0, 0, 0, 0);
+
+    console.log("now: ", new Date());
+    console.log("Date: ", now_date);
+
     const connection = await mysql.createConnection(database);
     let sql1 = queryize
       .select()
@@ -226,7 +230,7 @@ const getMaintainNowDate = async (req, res, next) => {
         "m.typeManage",
         "m.status"
       )
-      .where({ "m.accept_by": "4" })
+      .where("m.created_at", start, ">=")
       .orderBy("m.maintenance_id")
       .compile();
     const [data] = await connection.query(sql1.query, sql1.data);
@@ -412,7 +416,7 @@ const getMaintainDetail = async (req, res, next) => {
   }
 };
 
-router.get("/", getAllMaintain);
+router.get("/", getAllMaintains);
 router.get("/maintainuser/:id", getMaintainUser);
 router.get("/maintainadmin/:id", getMaintainAdmin);
 router.get("/maintainnowdate", getMaintainNowDate);
